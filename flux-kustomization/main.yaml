@@ -13,7 +13,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: flux2-kustomize-helm-example
-  namespace: default
+  namespace: test-proj-x8cdr
 spec:
   gitImplementation: libgit2
   interval: 5m
@@ -25,10 +25,10 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
   name: podinfo
-  namespace: default
+  namespace: test-proj-x8cdr
 spec:
   interval: 10m
-  targetNamespace: default
+  targetNamespace: test-proj-x8cdr
   sourceRef:
     kind: GitRepository
     name: flux2-kustomize-helm-example
