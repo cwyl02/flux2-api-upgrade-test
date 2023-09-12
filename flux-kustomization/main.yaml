@@ -1,0 +1,46 @@
+# apiVersion: source.toolkit.fluxcd.io/v1beta1
+# kind: GitRepository
+# metadata:
+#   name: podinfo
+#   namespace: default
+# spec:
+#   interval: 5m
+#   url: https://github.com/stefanprodan/podinfo
+#   ref:
+#     branch: master
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: flux2-kustomize-helm-example
+  namespace: default
+spec:
+  interval: 5m
+  url: https://github.com/fluxcd/flux2-kustomize-helm-example
+  ref:
+    branch: master
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  interval: 10m
+  targetNamespace: default
+  sourceRef:
+    kind: GitRepository
+    name: flux2-kustomize-helm-example
+  path: "./apps/base/podinfo"
+  prune: true
+  timeout: 1m
+  patchesJson6902:
+  - patch:
+    - op: add
+      path: /metadata/labels
+      value:
+        test: foo
+        bar: test
+    target:
+      kind: HelmRelease
+      name: podinfo
