@@ -1,25 +1,26 @@
-# apiVersion: source.toolkit.fluxcd.io/v1beta1
-# kind: GitRepository
-# metadata:
-#   name: podinfo
-#   namespace: default
-# spec:
-#   interval: 5m
-#   url: https://github.com/stefanprodan/podinfo
-#   ref:
-#     branch: master
----
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: flux2-kustomize-helm-example
+  name: podinfo
   namespace: test-proj-x8cdr
 spec:
   gitImplementation: libgit2
-  interval: 5m
-  url: https://github.com/fluxcd/flux2-kustomize-helm-example
+  interval: 1m
+  url: https://github.com/stefanprodan/podinfo
   ref:
-    branch: main
+    branch: master
+---
+# apiVersion: source.toolkit.fluxcd.io/v1beta1
+# kind: GitRepository
+# metadata:
+#   name: flux2-kustomize-helm-example
+#   namespace: test-proj-x8cdr
+# spec:
+#   gitImplementation: libgit2
+#   interval: 1m
+#   url: https://github.com/fluxcd/flux2-kustomize-helm-example
+#   ref:
+#     branch: main
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
@@ -31,8 +32,8 @@ spec:
   targetNamespace: test-proj-x8cdr
   sourceRef:
     kind: GitRepository
-    name: flux2-kustomize-helm-example
-  path: "./apps/base/podinfo"
+    name: podinfo
+  path: "./kustomize"
   prune: true
   timeout: 1m
   patchesJson6902:
@@ -40,8 +41,8 @@ spec:
     - op: add
       path: /metadata/labels
       value:
-        test: foo
+        test: patchesJson6902
         bar: test
     target:
-      kind: HelmRelease
+      kind: Deployment
       name: podinfo
