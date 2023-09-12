@@ -18,7 +18,7 @@ spec:
   interval: 5m
   url: https://github.com/fluxcd/flux2-kustomize-helm-example
   ref:
-    branch: master
+    branch: main
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
